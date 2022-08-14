@@ -1,0 +1,313 @@
+# 第07章_单行函数
+
+
+# 1. 函数的理解
+# 1.1 什么是函数
+
+# 1.2 不同DBMS函数的差异
+
+# 1.3 MySQL的内置函数及分类
+# 功能角度：数值函数、字符串函数、日期和时间函数、流程控制函数、加密与解密函数、获取MySQL信息函数、聚合函数等
+
+
+# 2. 数值函数
+# 2.1 基本函数
+SELECT ABS(-123), ABS(123), 
+SIGN(43), SIGN(-43), SIGN(0),
+PI(), 
+CEIL(32.32), CEILING(-43.23), 
+FLOOR(32.32), FLOOR(-43.23),
+LEAST(10, 20, 30), GREATEST(10, 20, 30), 
+MOD(12, 5) FROM DUAL; 
+
+SELECT RAND(), RAND(), RAND(10), RAND(10), RAND(-1), RAND(-1) FROM DUAL;
+
+SELECT ROUND(12.33), ROUND(12.343, 2), ROUND(12.324, -1), 
+TRUNCATE(12.66, 1), TRUNCATE(12.66, -1), 
+SQRT(1.44) FROM DUAL;
+
+# 2.2 角度与弧度互换函数
+SELECT RADIANS(30), RADIANS(60), RADIANS(90),
+DEGREES(2*PI()), DEGREES(RADIANS(90)) FROM DUAL;
+
+# 2.3 三角函数
+SELECT SIN(RADIANS(30)), ASIN(1), DEGREES(ASIN(1)),
+COS(RADIANS(60)), ACOS(1), DEGREES(ACOS(1)),
+TAN(RADIANS(45)), ATAN(1), DEGREES(ATAN(1)), ATAN2(2,1), DEGREES(ATAN2(2,1)),
+COT(RADIANS(45)) FROM DUAL;
+
+# 2.4 指数与对数
+SELECT POW(2, 3), POWER(2, 3),
+EXP(2),
+LN(EXP(2)), LOG(EXP(2)),
+LOG10(100),
+LOG2(4) FROM DUAL;
+
+# 2.5 进制间的转换
+SELECT BIN(10), HEX(10), OCT(10), CONV(10, 2, 8) FROM DUAL;
+
+
+# 3. 字符串函数
+SELECT ASCII('abc'), 
+CHAR_LENGTH('abc'), CHARACTER_LENGTH('abc'), CHAR_LENGTH('中国人呀'),
+LENGTH('abc'), LENGTH('中国人呀'),	# 一个汉字占4个字节
+CONCAT('abc', 'def', 'xyz'), CONCAT_WS('_', 'abc', 'def', 'xyz'),
+INSERT('abcdefxyz', 1, 3, 'ABC'),	# 字符串下标从1开始，a处的下标为1，不是0
+REPLACE('abcdefxyz', 'def', 'DEF'),
+UPPER('abcDEFxyz'), UCASE('abcDEFxyz'),
+LOWER('abcDEFxyz'), LCASE('abcDEFxyz'),
+LEFT('abcDEFxyz', 3), RIGHT('abcDEFxyz', 3),
+LPAD('abcDEFxyz', 12, '*'), RPAD('abcDEFxyz', 12, '#'),
+LTRIM(' abc DEF xyz '), RTRIM(' abc DEF xyz '), TRIM(' abc DEF xyz '), TRIM('#' FROM '## abc DEF xyz# ##'), TRIM(LEADING '#' FROM '# abc DEF xyz# ##'), TRIM(TRAILING'#' FROM '# abc DEF xyz# ##'),
+REPEAT('abc', 3),
+SPACE(3), LENGTH(SPACE(3)),
+STRCMP('abc', 'abc'), STRCMP('abd', 'abc'), STRCMP('abc', 'abd'),
+SUBSTR('abcdefxyz', 4, 3),
+LOCATE('def', 'abcdefxyz'), LOCATE('deg', 'abcdefxyz'),
+ELT(2, 'a', 'b', 'c', 'd'),
+FIELD('b', 'a', 'b', 'c', 'b'),
+FIND_IN_SET('abc', 'a,ab,abc,xyz'),	# 若这里逗号之间有空格，则返回0
+REVERSE('abcdefxyz'),
+NULLIF('abc', 'def'), NULLIF('abc', 'abc')
+FROM DUAL;
+
+
+# 4. 日期和时间函数
+# 4.1 获取日期、时间
+SELECT CURDATE(), CURRENT_DATE(),
+CURTIME(), CURRENT_TIME(),
+NOW(), SYSDATE(), CURRENT_TIMESTAMP(), LOCALTIME(), LOCALTIMESTAMP(),
+UTC_DATE(), UTC_TIME()
+FROM DUAL;
+
+# 4.2 日期与时间戳的转换
+SELECT UNIX_TIMESTAMP(), UNIX_TIMESTAMP(NOW()), UNIX_TIMESTAMP(CURDATE()), UNIX_TIMESTAMP(CURTIME()),
+FROM_UNIXTIME(UNIX_TIMESTAMP(NOW()))
+FROM DUAL;
+
+# 4.3 获取月份、星期、星期数、天数等函数
+SELECT YEAR(CURDATE()), MONTH(CURDATE()), DAY(CURDATE()),
+HOUR(CURTIME()), MINUTE(CURTIME()), SECOND(CURTIME()),
+MONTHNAME(CURDATE()), DAYNAME(CURDATE()), WEEKDAY(CURDATE()),	# 返回周几，周一是0，周二是1，...，周日是6
+QUARTER(CURDATE()),	# 返回对应季度
+WEEK(CURDATE()), WEEKOFYEAR(CURDATE()),	# 返回一年中的第几周
+DAYOFYEAR(CURDATE()),	# 返回一年中的第几天
+DAYOFMONTH(CURDATE()),	# 返回所在月份的第几天
+DAYOFWEEK(CURDATE())	# 返回所在周的第几天	周日是1，周一是2，...，周六是7
+FROM DUAL;
+
+# 4.4 日期的操作函数
+SELECT NOW(),
+EXTRACT(MICROSECOND FROM NOW()),
+EXTRACT(SECOND FROM NOW()),
+EXTRACT(MINUTE FROM NOW()),
+EXTRACT(HOUR FROM NOW()),
+EXTRACT(DAY FROM NOW()),
+EXTRACT(WEEK FROM NOW()),
+EXTRACT(MONTH FROM NOW()),
+EXTRACT(QUARTER FROM NOW()),
+EXTRACT(YEAR FROM NOW()),
+EXTRACT(SECOND_MICROSECOND FROM NOW()),
+EXTRACT(MINUTE_MICROSECOND FROM NOW()),
+EXTRACT(MINUTE_SECOND FROM NOW()),
+EXTRACT(HOUR_MICROSECOND FROM NOW()),
+EXTRACT(HOUR_SECOND FROM NOW()),
+EXTRACT(HOUR_MINUTE FROM NOW()),
+EXTRACT(DAY_MICROSECOND FROM NOW()),
+EXTRACT(DAY_SECOND FROM NOW()),
+EXTRACT(DAY_MINUTE FROM NOW()),
+EXTRACT(DAY_HOUR FROM NOW()),
+EXTRACT(YEAR_MONTH FROM NOW())
+FROM DUAL;
+
+# 4.5 时间和秒钟转换的函数
+SELECT TIME_TO_SEC(CURTIME()), SEC_TO_TIME(TIME_TO_SEC(CURTIME())) FROM DUAL;
+
+# 4.6 计算日期和时间的函数
+# 第1组
+SELECT NOW(),
+#date_add(NOW(), interval 1 hour), adddate(NOW(), interval 1 Hour),
+#date_sub(NOW(), interval 1 hour), subdate(NOW(), interval 1 hour),
+#DATE_ADD(NOW(), INTERVAL 1 Minute), ADDDATE(NOW(), INTERVAL 1 MINUTE),
+#DATE_SUB(NOW(), INTERVAL 1 MINUTE), SUBDATE(NOW(), INTERVAL 1 MINUTE),
+#DATE_ADD(NOW(), INTERVAL 1 second), ADDDATE(NOW(), INTERVAL 1 SECOND),
+#DATE_SUB(NOW(), INTERVAL 1 SECOND), SUBDATE(NOW(), INTERVAL 1 SECOND),
+#DATE_ADD(NOW(), INTERVAL 1 year), ADDDATE(NOW(), INTERVAL 1 year),
+#DATE_SUB(NOW(), INTERVAL 1 year), SUBDATE(NOW(), INTERVAL 1 year),
+#DATE_ADD(NOW(), INTERVAL 1 month), ADDDATE(NOW(), INTERVAL 1 month),
+#DATE_SUB(NOW(), INTERVAL 1 month), SUBDATE(NOW(), INTERVAL 1 month),
+#DATE_ADD(NOW(), INTERVAL 1 day), ADDDATE(NOW(), INTERVAL 1 day),
+#DATE_SUB(NOW(), INTERVAL 1 day), SUBDATE(NOW(), INTERVAL 1 day),
+#DATE_ADD(NOW(), INTERVAL '1_1' year_month), ADDDATE(NOW(), INTERVAL '1_1' YEAR_MONTH),
+#DATE_SUB(NOW(), INTERVAL '1_1' YEAR_MONTH), SUBDATE(NOW(), INTERVAL '1_1' YEAR_MONTH),
+#DATE_ADD(NOW(), INTERVAL '1_1' day_hour), ADDDATE(NOW(), INTERVAL '1_1' day_hour),
+#DATE_SUB(NOW(), INTERVAL '1_1' day_hour), SUBDATE(NOW(), INTERVAL '1_1' day_hour),
+# 注意：使用DAY_MINUTE时，前面的字符串要把中间的hour也要补齐，即 '1_0_1','1_1'会修改hour和min，day不变
+#	以下DAY_SECOND、HOUR_SECOND一样 
+#DATE_ADD(NOW(), INTERVAL '1_1' DAY_MINUTE), ADDDATE(NOW(), INTERVAL '1_1' DAY_minute),
+#DATE_SUB(NOW(), INTERVAL '1_1' DAY_MINUTE), SUBDATE(NOW(), INTERVAL '1_1' DAY_MINUTE),
+#DATE_ADD(NOW(), INTERVAL '1_0_1' DAY_MINUTE), ADDDATE(NOW(), INTERVAL '1_0_1' DAY_MINUTE),	
+#DATE_SUB(NOW(), INTERVAL '1_0_1' DAY_MINUTE), SUBDATE(NOW(), INTERVAL '1_0_1' DAY_MINUTE),
+# DAY_SECOND：写成 '1_0_0_1'
+#DATE_ADD(NOW(), INTERVAL '1_0_0_1' DAY_SECOND), ADDDATE(NOW(), INTERVAL '1_0_0_1' DAY_second),
+#DATE_SUB(NOW(), INTERVAL '1_0_0_1' DAY_SECOND), SUBDATE(NOW(), INTERVAL '1_0_0_1' DAY_SECOND),
+#DATE_ADD(NOW(), INTERVAL '1_1' hour_MINUTE), ADDDATE(NOW(), INTERVAL '1_1' HOUR_MINUTE),
+#DATE_SUB(NOW(), INTERVAL '1_1' HOUR_MINUTE), SUBDATE(NOW(), INTERVAL '1_1' HOUR_MINUTE),
+# HOUR_SECOND：写成 '1_0_1'
+#DATE_ADD(NOW(), INTERVAL '1_0_1' HOUR_second), ADDDATE(NOW(), INTERVAL '1_0_1' HOUR_SECOND),
+#DATE_SUB(NOW(), INTERVAL '1_0_1' HOUR_SECOND), SUBDATE(NOW(), INTERVAL '1_0_1' HOUR_SECOND),
+DATE_ADD(NOW(), INTERVAL '1_1' MINUTE_SECOND), ADDDATE(NOW(), INTERVAL '1_1' MINUTE_SECOND),
+DATE_SUB(NOW(), INTERVAL '1_1' MINUTE_SECOND), SUBDATE(NOW(), INTERVAL '1_1' MINUTE_SECOND),
+1
+FROM DUAL;
+
+# 第2组
+SELECT NOW(),
+ADDTIME(NOW(), 20),
+SUBTIME(NOW(), 30),
+DATEDIFF(NOW(), '2022-07-15'),
+TIMEDIFF(NOW(), '2022-07-15 01:00:00'),
+FROM_DAYS(366),
+TO_DAYS(NOW()),
+LAST_DAY(NOW()),
+MAKEDATE(2022, 100),
+MAKETIME(10,10,10)
+FROM DUAL;
+
+SELECT UNIX_TIMESTAMP() FROM DUAL;
+# 不行，提示参数不对
+#select period_add(curtime(), 1) from dual;
+#select period_add(unix_timestamp(), 1) from dual;
+
+# 4.7 日期的格式化与解析
+SELECT NOW(), DATE_FORMAT(NOW(), '%Y-%m-%d'),
+TIME_FORMAT(NOW(), '%H:%i:%S')
+FROM DUAL;
+
+SELECT STR_TO_DATE('09/01/2009', '%m/%d/%Y') FROM DUAL;
+SELECT STR_TO_DATE('20220717131420', '%Y%m%d%H%i%s') FROM DUAL;
+SELECT STR_TO_DATE('2022-07-17 13:14:20', '%Y-%m-%d %H:%i:%s') FROM DUAL;
+SELECT STR_TO_DATE('2022-07-17 13:14:20', '%Y-%m-%d') FROM DUAL;
+
+SELECT GET_FORMAT(DATE, 'ISO'),
+GET_FORMAT(TIME, 'ISO'),
+GET_FORMAT(DATETIME, 'ISO')
+FROM DUAL;
+
+SELECT DATE_FORMAT(NOW(), GET_FORMAT(DATE, 'USA')) FROM DUAL;
+
+
+# 5. 流程控制函数
+SELECT IF(1 > 0, '正确', '错误'), IF(1 < 0, '正确', '错误') FROM DUAL;
+
+SELECT IFNULL(NULL, 'Hello world'), IFNULL(1, 'Hello world') FROM DUAL;
+
+SELECT CASE
+WHEN 1 > 0 THEN '1 > 0'
+WHEN 2 > 0 THEN '2 > 0'
+ELSE '3 > 0' END
+FROM DUAL;
+
+SELECT CASE 2
+WHEN 1 THEN '1'
+WHEN 2 THEN '2'
+ELSE '3' END
+FROM DUAL;
+
+SELECT employee_id, salary, CASE 
+WHEN salary >=15000 THEN '高薪'
+WHEN salary >=10000 THEN '潜力股'
+WHEN salary >=8000 THEN '屌丝'
+ELSE '草根' END
+FROM employees;
+
+SELECT CASE 
+WHEN 1 > 0 THEN 'yes'
+WHEN 1 <= 0 THEN 'no'
+ELSE 'unknown' END
+FROM DUAL;
+
+SELECT CASE
+WHEN 1 < 0 THEN 'yes'
+WHEN 1 = 0 THEN 'no'
+ELSE 'unknown' END
+FROM DUAL;
+
+SELECT CASE 1
+WHEN 0 THEN 0
+WHEN 1 THEN 1
+ELSE -1 END
+FROM DUAL;
+
+SELECT CASE -1
+WHEN 0 THEN 0
+WHEN 1 THEN 1
+ELSE -1 END 
+FROM DUAL;
+
+SELECT employee_id, 12 * salary * (1 + IFNULL(commission_pct, 0)) FROM employees;
+
+SELECT last_name, job_id, salary, CASE job_id
+WHEN 'IT_PROG'  THEN 1.10 * salary
+WHEN 'ST_CLERK' THEN 1.15 * salary
+WHEN 'SA_REP'   THEN 1.20 * salary
+ELSE salary END AS 'REVISED_SALARY'
+FROM employees;
+
+# 查询部门号为 10,20, 30 的员工信息, 
+# 若部门号为 10, 则打印其工资的 1.1 倍, 
+# 	20 号部门, 则打印其工资的 1.2 倍, 
+# 	30 号部门打印其工资的 1.3 倍数。
+SELECT last_name, department_id, CASE department_id
+WHEN 10 THEN 1.1 * salary
+WHEN 20 THEN 1.2 * salary
+WHEN 30 THEN 1.3 * salary
+END AS 'REVISED_SALARY'
+FROM employees WHERE department_id IN (10, 20, 30); 
+
+
+# 6. 加密与解密函数
+# password()在MySQL8.0中弃用
+# select password('123'), password(null) from dual;
+
+SELECT MD5('123'), MD5(NULL) FROM DUAL;
+
+SELECT SHA('123'), SHA(NULL) FROM DUAL;
+
+# encode()、decode() 在MySQL8.0中弃用
+# select encode('123', 'mysql') decode(encode('123', 'mysql'), 'mysql') from dual;
+
+
+# 7. MySQL信息函数
+SELECT VERSION(),	# 当前MySQL的版本号
+CONNECTION_ID(),	# 当前MySQL服务器的连接数
+DATABASE(),SCHEMA(),	# 当前所在数据库
+USER(), CURRENT_USER(), SYSTEM_USER(), SESSION_USER(),	# 当前连接MySQL的用户名，格式：“用户名@主机名”
+CHARSET('123'), CHARSET('中国人'),	# 返回字符串的字符集
+COLLATION('123'), COLLATION('中国人')	# 返回字符串的比较规则
+FROM DUAL;
+
+
+# 8. 其他函数
+# 对数字进行格式化，n表示四舍五入后保留到小数点后n位，当n<=0，只保留整数部分
+SELECT FORMAT(123.123, 2), FORMAT(123.123, 0), FORMAT(123.123, -2) FROM DUAL;
+
+# 进制转换
+# 将16从十进制转成二进制，从八进制转成十进制
+SELECT CONV(16, 10, 2), CONV(16, 8, 10) FROM DUAL;
+
+# 将以点分隔的IP地址转化成一个数字
+# 转化方式：192 * 256^3 + 168 * 256^2 + 1 * 256^1 + 100 * 256^0
+SELECT INET_ATON('192.168.1.100') FROM DUAL;
+SELECT 192 * POW(256, 3) + 168 * POW(256, 2) + 1 * POW(256, 1) + 100 * POW(256, 0);
+
+# 将数字形式的IP地址转化成以点分隔的IP地址
+SELECT INET_NTOA(INET_ATON('192.168.1.100')) FROM DUAL;
+
+# 将表达式expr重复执行n次，用于测试MySQL处理expr表达式所耗费的时间
+SELECT BENCHMARK(10000, MD5('mysql')) FROM DUAL;
+
+# convert(value using char_code): 将value所使用的字符编码修改为char_code
+SELECT CHARSET('mysql'), CHARSET(CONVERT('mysql' USING 'gbk')) FROM DUAL;
+
+
