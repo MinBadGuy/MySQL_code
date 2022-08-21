@@ -22,7 +22,7 @@ SELECT * FROM employees WHERE employee_id % 2 = 0;
 
 # 2. 比较运算符
 # 2.1 等号运算符 =
-# 1 = 'a' 结果是1，字符串会进行隐式转换，和1.2一样
+# 1 = 'a' 结果是0，字符串会进行隐式转换，和1.2一样
 # NULL = NULL 结果是NULL，只要有NULL参与比较运算，结果就为NULL
 SELECT 1 = 1, 1 = '1', 1 = 0, 'a' = 'a', (5 + 3) =(2 + 6),'' = NULL, NULL = NULL FROM DUAL;
 

@@ -122,7 +122,7 @@ CREATE TABLE emp2(
 deptno INT(2) AUTO_INCREMENT,
 dname VARCHAR(14),
 loc VARCHAR(13),
-# 逐渐
+# 主键
 PRIMARY KEY(deptno)
 );
 
